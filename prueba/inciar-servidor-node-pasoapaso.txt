@@ -1,0 +1,108 @@
+//como iniciar el servidor en node desde cero
+
+//escribir en terminal
+
+npm init -y 
+
+//Esto iniciará nuestro archivo package-json
+
+//instalar dependencias:
+
+npm install express pg pg-hstore sequelize morgan @babel/polyfill
+
+/*https://babeljs.io/docs/en/usage en esta pagina podemos encontrar los comandos para
+instalar babel, dejo el link porque pueden actualizar los módulos y no va a ser el
+mismo comando*/
+
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+
+//crear archivo .babelrc
+
+{
+    "presets": [
+        "@babel/preset-env"
+    ]
+}
+
+//creamos carpeta src
+
+//creamos archivo index.js
+
+const hello = "hello world";
+
+//configuramos el package json:
+
+//en scripts, borramos "test" y creamos nuestro "build" de la siguiente manera
+
+	"build": "babel src --out-dir dist"
+
+//Corremos este script con npm run build.
+
+//ahora vamos a crear el script "start"
+
+	"start": "node dist/index.js"
+
+//build convierte el código y start lo ejecuta
+
+//ahora instalaremos otras dependencias
+
+npm install nodemon -D
+
+/*Permite reiniciar el código de node.js . Esta dependencia reinicia codigo de
+js pero esta vez con node. Pero, como estamos usando codigo moderno de js, tenemos
+que instalar otra dependencia*/
+
+npm install @babel/node -D
+
+//Estos módulos son para desarrollo, no para producción.
+
+//crearemos un nuevo script para usar las devDependencies que instalamos
+
+	"dev": "nodemon src/index.js --exec babel-node"
+
+/*los scripts del package json deberían quedar de la siguiente manera:
+"scripts": {
+    "dev": "nodemon src/index.js --exec babel-node",
+    "build": "babel src --out-dir dist",
+    "start": "node dist/index.js"
+  },
+*/
+
+//para correr nuestro script, solo debemos escribir en terminal
+
+npm run dev
+
+//volvemos a la carpeta src y creamos un nuevo archivo app.js
+//tambien podemos crear 4 carpetas mas adentro de src, como model, controller, routes y database
+
+//configuramos nuestro app.js
+
+import express, { json } from 'express';
+import morgan from 'morgan';
+
+const app = express ();
+
+
+//MIDDLEWARES
+app.use(morgan('dev'));
+app.use(json());
+
+export default app
+
+//Por ultimo, en index, configuramos nuestro servidor
+
+import app from './app'
+
+async function main() {
+	await app.listen(4000);
+	console.log('Server en puerto 4000');
+};
+
+main();
+
+
+
+
+
+
+
